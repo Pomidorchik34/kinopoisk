@@ -15,17 +15,6 @@ import axios from "axios";
 function Movies() {
   const [data, setData] = useState([]);
   useEffect(() => {
-    // fetch("https://api.kinopoisk.dev/v1.4/movie", {
-    //   headers: {
-    //     "X-API-KEY": "CYE4W49-C8544FW-PFWEDHC-YABZPNV",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setData(data);
-    //     console.log(data);
-    //   })
-    //   .catch((err) => console.log(err));
     axios("https://api.kinopoisk.dev/v1.4/movie", {
       headers: {
         "X-API-KEY": "CYE4W49-C8544FW-PFWEDHC-YABZPNV",
@@ -35,6 +24,22 @@ function Movies() {
       console.log(data);
     });
   }, []);
+  const [dataCopied, setDataCopied] = useState([]);
+
+  function Search(e) {
+    let copied = [];
+    console.log(e.target.name, dataCopied);
+    data.length > 0 &&
+      data.forEach((value, index) => {
+        if (value.name.includes(e.target.value)) {
+          copied.push(value);
+          setDataCopied(copied);
+        } else if (e.target.value) {
+          setDataCopied(data);
+        }
+      });
+  }
+
   const [count, setCount] = useState(0);
   let marked = [];
   if (localStorage.getItem("marked")) {
@@ -87,6 +92,7 @@ function Movies() {
         <label className="flex gap-6 items-center">
           <img src={search} alt="" />
           <input
+            onChange={Search}
             type="text"
             className="bg-transparent pt-2"
             placeholder="Search for movies"
@@ -95,51 +101,106 @@ function Movies() {
         <div className="movies pt-[34px]">
           <h1 className="heading pb-[38px]">Movies</h1>
           <div className="cards flex flex-wrap gap-[40px]">
-            {data.map((value, index) => {
-              return (
-                <div className="card" key={index}>
-                  <div className="image relative">
-                    <img
-                      className="w-[280px] h-[174px] cover rounded-[12px]"
-                      src="https://picsum.photos/200/300"
-                      alt=""
-                    />
-                    <button
-                      id={value}
-                      onClick={(e) => {
-                        notify;
-                        if (localStorage.getItem("marked")) {
-                          marked = JSON.parse(localStorage.getItem("marked"));
-                          marked.push({ index, value });
-                          localStorage.setItem(
-                            "marked",
-                            JSON.stringify(marked)
-                          );
-                        } else {
-                          marked.push({ index, value });
-                          localStorage.setItem(
-                            "marked",
-                            JSON.stringify(marked)
-                          );
-                        }
-                      }}
-                      className="absolute right-[16px] top-[16px] bg-slate-600 p-[9px] px-[15px] rounded-[50%]"
-                    >
-                      <i className="fa-regular fa-bookmark"></i>
-                    </button>
+            {dataCopied.length <= 0 &&
+              data.map((value, index) => {
+                return (
+                  <div className="card" key={index}>
+                    <div className="image relative">
+                      <img
+                        className="w-[280px] h-[174px] cover rounded-[12px]"
+                        src="https://picsum.photos/200/300"
+                        alt=""
+                      />
+                      <button
+                        id={value}
+                        onClick={(e) => {
+                          notify;
+                          if (localStorage.getItem("marked")) {
+                            marked = JSON.parse(localStorage.getItem("marked"));
+                            marked.push({ index, value });
+                            localStorage.setItem(
+                              "marked",
+                              JSON.stringify(marked)
+                            );
+                          } else {
+                            marked.push({ index, value });
+                            localStorage.setItem(
+                              "marked",
+                              JSON.stringify(marked)
+                            );
+                          }
+                        }}
+                        className="absolute right-[16px] top-[16px] bg-slate-600 p-[9px] px-[15px] rounded-[50%]"
+                      >
+                        <i className="fa-regular fa-bookmark"></i>
+                      </button>
+                    </div>
+                    <ul className="flex gap-3 list">
+                      <li>{value.year}</li>
+                      <li className="flex items-center gap-1">
+                        <img
+                          src={shape3}
+                          className="w-[12px] h-[12px]"
+                          alt=""
+                        />
+                        Movie
+                      </li>
+                      <li>18+</li>
+                    </ul>
+                    <h2 className="28px">{value.name}</h2>
                   </div>
-                  <ul className="flex gap-3 list">
-                    <li>{value.year}</li>
-                    <li className="flex items-center gap-1">
-                      <img src={shape3} className="w-[12px] h-[12px]" alt="" />
-                      Movie
-                    </li>
-                    <li>18+</li>
-                  </ul>
-                  <h2 className="28px">{value.name}</h2>
-                </div>
-              );
-            })}
+                );
+              })}
+            {dataCopied.length > 0 &&
+              dataCopied.map((value, index) => {
+                return (
+                  <div className="card" key={index}>
+                    <div className="image relative">
+                      <img
+                        className="w-[280px] h-[174px] cover rounded-[12px]"
+                        src="https://picsum.photos/200/300"
+                        alt=""
+                      />
+                      <button
+                        id={value}
+                        onClick={(e) => {
+                          notify;
+                          if (localStorage.getItem("marked")) {
+                            marked = JSON.parse(localStorage.getItem("marked"));
+                            marked.push({ index, value });
+                            localStorage.setItem(
+                              "marked",
+                              JSON.stringify(marked)
+                            );
+                          } else {
+                            marked.push({ index, value });
+                            localStorage.setItem(
+                              "marked",
+                              JSON.stringify(marked)
+                            );
+                          }
+                        }}
+                        className="absolute right-[16px] top-[16px] bg-slate-600 p-[9px] px-[15px] rounded-[50%]"
+                      >
+                        <i className="fa-regular fa-bookmark"></i>
+                      </button>
+                    </div>
+                    <ul className="flex gap-3 list">
+                      <li>{value.year}</li>
+                      <li className="flex items-center gap-1">
+                        <img
+                          src={shape3}
+                          className="w-[12px] h-[12px]"
+                          alt=""
+                        />
+                        Movie
+                      </li>
+                      <li>18+</li>
+                    </ul>
+                    <h2 className="28px">{value.name}</h2>
+                  </div>
+                );
+              })}
           </div>
         </div>
         <ToastContainer
