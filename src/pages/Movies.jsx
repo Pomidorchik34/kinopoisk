@@ -11,11 +11,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "../App.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import instancse from "../utils/axios";
 
 function Movies() {
   const [data, setData] = useState([]);
   useEffect(() => {
-    axios("https://api.kinopoisk.dev/v1.4/movie", {
+    instancse("/movie", {
       headers: {
         "X-API-KEY": "CYE4W49-C8544FW-PFWEDHC-YABZPNV",
       },
